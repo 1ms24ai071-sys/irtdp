@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Condiment&family=Share+Tech+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #010828;
+  --cream: #EFF4FF;
+  --neon: #6FFF00;
+  --glass-bg: rgba(239, 244, 255, 0.04);
+  --glass-border: rgba(239, 244, 255, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--bg);
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  overflow-x: hidden;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(239,244,255,0.06) 0%, transparent 50%, rgba(111,255,0,0.03) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.glass > * { position: relative; z-index: 1; }
+.glass:hover {
+  border-color: rgba(111, 255, 0, 0.25);
+  background: rgba(239, 244, 255, 0.07);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(111,255,0,0.08);
+}
+
+.texture-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+
+.btn-neon {
+  background: var(--neon);
+  color: var(--bg);
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.1em;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 20px rgba(111,255,0,0.4);
+  font-size: 1rem;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.btn-neon:hover {
+  box-shadow: 0 0 40px rgba(111,255,0,0.8), 0 0 80px rgba(111,255,0,0.3);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--cream);
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(239,244,255,0.25);
+  padding: 14px 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+.btn-outline:hover {
+  border-color: var(--neon);
+  color: var(--neon);
+  background: rgba(111,255,0,0.06);
+}
+
+.badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+.badge-new { background: rgba(111,255,0,0.15); border: 1px solid rgba(111,255,0,0.5); color: #6FFF00; }
+.badge-processing { background: rgba(255,200,0,0.15); border: 1px solid rgba(255,200,0,0.5); color: #FFC800; }
+.badge-resolved { background: rgba(100,200,255,0.15); border: 1px solid rgba(100,200,255,0.5); color: #64C8FF; }
+.badge-critical { background: rgba(255,60,60,0.15); border: 1px solid rgba(255,60,60,0.5); color: #FF3C3C; }
+
+.input-glass {
+  width: 100%;
+  background: rgba(239,244,255,0.04);
+  border: 1px solid rgba(239,244,255,0.1);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--cream);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+.input-glass::placeholder { color: rgba(239,244,255,0.3); }
+.input-glass:focus {
+  border-color: rgba(111,255,0,0.5);
+  background: rgba(239,244,255,0.07);
+  box-shadow: 0 0 0 3px rgba(111,255,0,0.08);
+}
+
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(111,255,0,0.6), transparent);
+  pointer-events: none;
+  animation: scanAnim 8s linear infinite;
+}
+
+@keyframes scanAnim {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(239,244,255,0.05) 25%, rgba(239,244,255,0.1) 50%, rgba(239,244,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.grid-bg {
+  background-image: linear-gradient(rgba(111,255,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(111,255,0,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.7s ease forwards; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(111,255,0,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(111,255,0,0.6); }
+
+/* ── Card hover lift ─────────────────────────────────────────── */
+article.glass:hover,
+div.glass:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 0 32px rgba(111,255,0,0.07);
+}
+
+/* Badge inline-flex for dot support */
+.badge {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Input focus ring accessibility ─────────────────────────── */
+.input-glass:focus-visible {
+  outline: 2px solid rgba(111,255,0,0.4);
+  outline-offset: 1px;
+}
+
+/* ── Smooth page transitions ─────────────────────────────────── */
+main > section,
+main > div {
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* ── Button scale interaction ────────────────────────────────── */
+.btn-neon:not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+}
+.btn-outline:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+/* ── Filter pill active glow ─────────────────────────────────── */
+button.border-neon {
+  box-shadow: 0 0 12px rgba(111,255,0,0.15);
+}
+
+/* ── Card entry animation (used by IncidentCard) ─────────────── */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Global focus-visible ring (accessibility) ───────────────── */
+:focus-visible {
+  outline: 2px solid rgba(111, 255, 0, 0.55);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Override for elements that already have their own focus style */
+.input-glass:focus-visible,
+.glass:focus-visible {
+  outline: none; /* handled by box-shadow in .input-glass:focus */
+}
+
+/* Neon focus ring utility */
+.focus-visible\:ring-neon\/50:focus-visible {
+  box-shadow: 0 0 0 2px rgba(111, 255, 0, 0.5);
+  outline: none;
+}
+.focus-visible\:outline-neon:focus-visible {
+  outline: 2px solid rgba(111, 255, 0, 0.55);
+  outline-offset: 2px;
+}
+.focus-visible\:border-neon\/60:focus-visible {
+  border-color: rgba(111, 255, 0, 0.6);
+}
+
+/* ── Browser autofill — override Chrome/Safari blue bg ───────── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 40px #010e2a inset !important;
+  -webkit-text-fill-color: #EFF4FF !important;
+  caret-color: #EFF4FF;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Keep opacity transitions for visibility — just make instant */
+  .skeleton {
+    animation: none;
+    background: rgba(239, 244, 255, 0.07);
+  }
+  /* Disable scan line and float animations */
+  .scan-line,
+  .animate-float {
+    display: none;
+  }
+  /* Disable ping rings */
+  .animate-ping {
+    animation: none !important;
+    opacity: 0;
+  }
+}
+
+/* ── Consistent glass hover transition ───────────────────────── */
+.glass {
+  transition: background 0.3s ease, border-color 0.3s ease,
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+/* Opt-out: glass cards that shouldn't lift on hover */
+.glass.no-hover:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Standardize button transitions ──────────────────────────── */
+.btn-neon,
+.btn-outline {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Select element reset (matches input-glass) ──────────────── */
+select.input-glass {
+  background-color: rgba(239, 244, 255, 0.04);
+  color: #EFF4FF;
+}
+select.input-glass option {
+  background: #010e2a;
+  color: #EFF4FF;
+}

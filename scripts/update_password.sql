@@ -1,0 +1,1 @@
+UPDATE users SET password_hash = '$2a$10$cBm7eak8VnbRYJxRUNV2TeNtpaNK8jeJCL7IZbjlqgvCtFHSw8Mim' WHERE email = 'admin@irtdp.com';

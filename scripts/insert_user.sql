@@ -1,0 +1,1 @@
+INSERT INTO users (id, email, password_hash, display_name, role) VALUES ('00000000-0000-0000-0000-000000000001', 'admin@irtdp.com', '$2a$10$cBm7eak8VnbRYJxRUNV2TeNtpaNK8jeJCL7IZbjlqgvCtFHSw8Mim', 'Platform Admin', 'admin');

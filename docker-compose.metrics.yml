@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: irtdp-pgbouncer
+    environment:
+      DB_USER: ${POSTGRES_USER:-irtdp}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-irtdp_secret}
+      DB_HOST: postgres
+      DB_NAME: ${POSTGRES_DB:-irtdp}
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 500
+      DEFAULT_POOL_SIZE: 20
+    ports:
+      - "6432:6432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [irtdp]
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: irtdp-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks: [irtdp]
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: irtdp-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_super_secret # Change this!
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks: [irtdp]
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  irtdp:
+    driver: bridge

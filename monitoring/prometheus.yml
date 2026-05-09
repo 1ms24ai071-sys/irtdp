@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'irtdp-services'
+    static_configs:
+      - targets:
+        - 'api-gateway:8080'
+        - 'incident-service:3002'
+        - 'auth-service:3001'
+        - 'media-service:3003'
+        - 'audit-service:3006'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

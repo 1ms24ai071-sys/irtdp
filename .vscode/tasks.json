@@ -1,0 +1,57 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Recreate incident-service",
+			"type": "shell",
+			"command": "docker compose up -d --force-recreate incident-service"
+		},
+		{
+			"label": "Update admin email",
+			"type": "shell",
+			"command": "docker exec irtdp-postgres psql -U irtdp -d irtdp -c \"UPDATE users SET email = 'admin@irtdp.com' WHERE id = '00000000-0000-0000-0000-000000000001';\""
+		},
+		{
+			"label": "Restart incident-service",
+			"type": "shell",
+			"command": "docker compose stop incident-service && docker compose up -d incident-service"
+		},
+		{
+			"label": "Check admin user",
+			"type": "shell",
+			"command": "docker exec irtdp-postgres psql -U irtdp -d irtdp -c \"SELECT email FROM users WHERE email = 'admin@irtdp.com';\""
+		},
+		{
+			"label": "Insert admin user",
+			"type": "shell",
+			"command": "docker exec irtdp-postgres psql -U irtdp -d irtdp -c \"INSERT INTO users (id, email, password_hash, role, display_name) VALUES ('00000000-0000-0000-0000-000000000001','admin@irtdp.com', '$2a$10$cBm7eak8VnbRYJxRUNV2TeNtpaNK8jeJCL7IZbjlqgvCtFHSw8Mim','admin','Platform Admin') ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email;\""
+		},
+		{
+			"label": "Restart incident-service",
+			"type": "shell",
+			"command": "docker compose stop incident-service && docker compose up -d incident-service"
+		},
+		{
+			"label": "Ensure admin user",
+			"type": "shell",
+			"command": "docker exec irtdp-postgres psql -U irtdp -d irtdp -c \"INSERT INTO users (id, email, password_hash, role, display_name) VALUES ('00000000-0000-0000-0000-000000000001','admin@irtdp.com', '$2a$10$cBm7eak8VnbRYJxRUNV2TeNtpaNK8jeJCL7IZbjlqgvCtFHSw8Mim','admin','Platform Admin') ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, password_hash = EXCLUDED.password_hash;\""
+		},
+		{
+			"label": "Restart incident-service",
+			"type": "shell",
+			"command": "cd \"C:\\Users\\vthar\\OneDrive\\Desktop\\irtdp-main\\irtdp-main\" && docker compose stop incident-service && docker compose up -d incident-service"
+		},
+		{
+			"label": "run auth service",
+			"type": "shell",
+			"command": "cd services/auth-service && npm install && DATABASE_URL=postgres://irtdp:irtdp@localhost:5432/irtdp REDIS_URL=redis://localhost:6379 npm start",
+			"isBackground": true
+		},
+		{
+			"label": "install auth deps",
+			"type": "shell",
+			"command": "cd services/auth-service && npm install",
+			"isBackground": false
+		}
+	]
+}

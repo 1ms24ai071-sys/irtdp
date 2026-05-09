@@ -1,0 +1,26 @@
+groups:
+  - name: irtdp
+    rules:
+      - alert: HighErrorRate
+        expr: rate(gateway_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate on API Gateway ({{ $value | humanizePercentage }})"
+
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+
+      - alert: SlowResponses
+        expr: histogram_quantile(0.95, rate(gateway_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "p95 latency is {{ $value }}s on API Gateway"
